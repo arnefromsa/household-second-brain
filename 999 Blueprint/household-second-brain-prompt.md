@@ -32,12 +32,13 @@ Second Brain/
   30 People/
   40 Resources/
   50 Documents/
+  60 Dashboards/
   90 Archive/
 ```
 
 `INDEX.md` is the canonical root instruction file. `CLAUDE.md`, `AGENTS.md`, and `CODEX.md` are compatibility files for different assistants. They should point to `INDEX.md` and briefly state that `INDEX.md` is the source of truth.
 
-Create these dashboard notes:
+Create these index and dashboard notes:
 
 ```text
 02 Inbox/Inbox.md
@@ -82,6 +83,8 @@ Create these dashboard notes:
 30 People/People.md
 40 Resources/Resources.md
 50 Documents/Documents.md
+60 Dashboards/Dashboards.md
+60 Dashboards/Household Dashboard Instructions.md
 90 Archive/Archive.md
 ```
 
@@ -129,6 +132,7 @@ This file is the root instruction document for AI assistants including Claude Co
 - Put uncategorized captures in `02 Inbox/`.
 - When answering a question or receiving an action update, update the most relevant durable note if it creates, corrects, clarifies, completes, or changes household knowledge.
 - Log important questions, unresolved gaps, and follow-up actions in `02 Inbox/Question Log.md`.
+- After a major knowledgebase update, refresh the household dashboard or record why it was not needed.
 - Use dates in `YYYY-MM-DD` format.
 - Ask before adding sensitive personal, medical, financial, or identity information.
 
@@ -140,7 +144,53 @@ This file is the root instruction document for AI assistants including Claude Co
 - `30 People/`: practical notes about household members.
 - `40 Resources/`: stable reference material.
 - `50 Documents/`: raw files, bills, statements, receipts, policies, scans, and manuals.
+- `60 Dashboards/`: generated or hand-built dashboard views, including `Household Dashboard.html` and the instructions for maintaining it.
 - `90 Archive/`: inactive or superseded material.
+
+## Dashboard Rules
+
+The household dashboard is a readable HTML control panel for the household. It should live at:
+
+`60 Dashboards/Household Dashboard.html`
+
+Build and maintenance instructions live at:
+
+`60 Dashboards/Household Dashboard Instructions.md`
+
+When building or updating the dashboard:
+
+- Treat Markdown notes as the source of truth.
+- Do not invent household data just to fill the interface.
+- Prefer a static, self-contained HTML file with embedded CSS and minimal JavaScript.
+- Do not require a web server unless the user explicitly asks for live data loading.
+- Show source links back to the notes that supplied each dashboard section.
+- Make the dashboard useful at a glance: priorities, bills, maintenance, family logistics, emergency information, recent changes, and open questions.
+- If the dashboard exposes sensitive information, ask before adding it.
+- When the dashboard reveals stale or missing information, update the relevant note and record meaningful gaps in `02 Inbox/Question Log.md`.
+
+## Major Update Dashboard Refresh
+
+A major knowledgebase update is any change that materially affects the household picture. Examples:
+
+- Importing or reorganizing household records.
+- Adding or changing active projects.
+- Adding, changing, or resolving bills, subscriptions, insurance, or renewals.
+- Adding or changing maintenance tasks, contractors, rooms, or household systems.
+- Updating emergency, school, health, vehicle, routine, or people-related information.
+- Processing several inbox items at once.
+- Making broad structural changes to the vault.
+
+After a major update:
+
+1. Update the relevant Markdown notes first.
+2. Check whether `60 Dashboards/Household Dashboard.html` needs to change.
+3. If it exists, refresh it so it reflects the updated notes.
+4. If it does not exist yet, update `60 Dashboards/Household Dashboard Instructions.md` only if the requested dashboard behavior has changed.
+5. Add a short entry to `02 Inbox/Question Log.md` if the update revealed a meaningful gap or follow-up action.
+
+If the assistant supports delegated work or subagents, it should spin off a dashboard-refresh subagent after major updates. The subagent should read `INDEX.md`, read `60 Dashboards/Household Dashboard Instructions.md`, inspect the changed notes, update the dashboard, and report back with files changed and any gaps found.
+
+If subagents are not supported, the active assistant should perform the dashboard refresh itself before finishing the task.
 
 ## Naming
 
@@ -211,6 +261,7 @@ Write `00 Home.md` with:
 - [[20 Areas/Household/Emergency/Emergency]]
 - [[30 People/People]]
 - [[50 Documents/Documents]]
+- [[60 Dashboards/Dashboards]]
 
 ## Active Projects
 
@@ -243,6 +294,96 @@ Write `01 Current Priorities.md` with:
 ## Family Logistics
 
 ## Parking Lot
+```
+
+Write `60 Dashboards/Dashboards.md` with:
+
+```markdown
+# Dashboards
+
+Use this folder for generated or hand-built dashboard views that summarize the household second brain.
+
+## Dashboard Files
+
+- [[60 Dashboards/Household Dashboard Instructions]]
+- `60 Dashboards/Household Dashboard.html`
+
+## Rules
+
+- Markdown notes are the source of truth.
+- Dashboards should summarize and link back to notes rather than replace them.
+- Keep sensitive information minimal.
+- Update the relevant note when a dashboard exposes stale or missing information.
+- After major knowledgebase updates, refresh `Household Dashboard.html` if it exists.
+- If the current assistant supports subagents or delegated tasks, use a dashboard-refresh subagent for that refresh.
+```
+
+Write `60 Dashboards/Household Dashboard Instructions.md` with concise dashboard build and maintenance instructions:
+
+```markdown
+# Household Dashboard Instructions
+
+Build `Household Dashboard.html` as a local, static household control panel at `60 Dashboards/Household Dashboard.html`.
+
+## Purpose
+
+The dashboard should answer what needs attention now, which bills and maintenance tasks are coming up, which projects are active, what family logistics are unresolved, where emergency notes live, and what the second brain recently learned.
+
+## Source Notes
+
+Use these notes first:
+
+- `00 Home.md`
+- `01 Current Priorities.md`
+- `02 Inbox/Question Log.md`
+- `02 Inbox/To Process.md`
+- `10 Projects/Projects.md`
+- `20 Areas/Household/Household.md`
+- `20 Areas/Household/Finance/Bills.md`
+- `20 Areas/Household/Finance/Subscriptions.md`
+- `20 Areas/Household/Finance/Insurance.md`
+- `20 Areas/Household/Maintenance/Maintenance.md`
+- `20 Areas/Household/Maintenance/Maintenance Log.md`
+- `20 Areas/Household/Maintenance/Contractors.md`
+- `20 Areas/Household/Routines/Routines.md`
+- `20 Areas/Household/Food/Meal Planning.md`
+- `20 Areas/Household/Emergency/Emergency.md`
+- `20 Areas/Household/Emergency/Contacts.md`
+- `20 Areas/Household/Emergency/Shutoffs.md`
+- `30 People/People.md`
+- `50 Documents/Documents.md`
+
+## Suggested Sections
+
+- Household Pulse
+- This Week
+- Attention Queue
+- Bills And Money
+- Maintenance Radar
+- Family Logistics
+- Projects
+- Emergency Strip
+- Recent Learning
+- Documents To File
+
+## Build Rules
+
+- Treat Markdown notes as the source of truth.
+- Do not invent household data.
+- Use one self-contained HTML file with embedded CSS and minimal JavaScript.
+- Include source-note links near each section.
+- Keep sensitive information minimal and ask before exposing it.
+- Use helpful empty states when source notes have no data.
+- Avoid external CDNs so the dashboard works offline.
+
+## Maintenance Loop
+
+1. Read `INDEX.md`.
+2. Read this instruction file.
+3. Read the relevant source notes.
+4. Update source notes first if information is missing or stale.
+5. Regenerate or edit `Household Dashboard.html` if it exists or if the user asked for dashboard creation.
+6. Add a short `02 Inbox/Question Log.md` entry if dashboard work revealed a meaningful gap.
 ```
 
 Write `02 Inbox/Question Log.md` with:
